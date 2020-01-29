@@ -2,5 +2,64 @@ from email_model import EmailModel
 import jsonpickle
 
 class EmailService():
+    def get_model_from_json(self, email_json):
+        email_model = EmailModel()
+        #Slight differences in naming between model and json we take in
+        try:
+            email_model.to_addr = email_json["to"]
+        except KeyError: # We'll be doing validation later, just prevent a 500 error for now
+            email_model.to_addr = ''
+
+        try:
+            email_model.to_name = email_json["to_name"]
+        except KeyError:
+            email_model.to_name = ''
+
+        try:
+            email_model.from_addr = email_json["from"]
+        except KeyError:
+            email_model.from_addr = ''
+
+        try:
+            email_model.from_name = email_json["from_name"]
+        except KeyError:
+            email_model.from_name = ''
+        
+        try:
+            email_model.subject = email_json["subject"]
+        except KeyError:
+            email_model.subject = ''
+        
+        try:
+            email_model.body = email_json["body"]
+        except KeyError:
+            email_model.body = ''
+
+        return email_model
+
+    # Returns error string or True if successful
+    def validate_email(self, email: EmailModel):
+
+        # Might be some refleciton/looping we could do here?
+        if(not email.to_addr):
+            return "'to' not set" #Return json name for this property, not model name
+        if(not email.to_name):
+            return "'to_name' not set"
+        if(not email.from_addr):
+            return "'from' not set"
+        if(not email.from_name):
+            return "'from_name' not set'"
+        if(not email.subject):
+            return "'subject' not set"
+        if(not email.body):
+            return "'body' not set"
+
+        return True
+
+
     def send_email(self, email: EmailModel):
         return jsonpickle.encode(email, make_refs=False)
+
+    # def send_email_mailgun():
+
+    # def send_email_sendgrid():
