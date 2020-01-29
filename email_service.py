@@ -85,8 +85,8 @@ class EmailService():
         url = config["sendgrid_url"]
         headers = { 'Authorization': f'Bearer {config["sendgrid_auth_token"]}' }
         payload = {"personalizations":
-                    [{"to": [{"email": email.to_addr}]}],
-                    "from": {"email": email.from_addr},
+                    [{"to": [{"email": email.to_addr, "name": email.to_name}]}],
+                    "from": {"email": email.from_addr, "name": email.from_name},
                     "subject": email.subject,
                     "content": [{
                         "type": "text/plain", "value": email.body
