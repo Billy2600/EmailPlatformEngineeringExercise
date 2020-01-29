@@ -1,5 +1,6 @@
 from email_model import EmailModel
-import jsonpickle
+import requests
+import json
 
 class EmailService():
     def get_model_from_json(self, email_json):
@@ -37,6 +38,7 @@ class EmailService():
 
         return email_model
 
+
     # Returns error string or True if successful
     def validate_email(self, email: EmailModel):
 
@@ -58,8 +60,47 @@ class EmailService():
 
 
     def send_email(self, email: EmailModel):
-        return jsonpickle.encode(email, make_refs=False)
+        return self.send_email_sendgrid(email)
 
-    # def send_email_mailgun():
+        # mailgun = False
+        # sendgrid = False
 
-    # def send_email_sendgrid():
+        # mailgun = self.send_email_mailgun(email)
+        
+        # if(mailgun == False):
+        #     sendgrid = self.send_email_sendgrid(email)
+
+        # if(mailgun == True or sendgrid == True):
+        #     return True
+        # else:
+        #     return False
+
+    def send_email_mailgun(self, email: EmailModel):
+
+        url = ''
+        return False
+
+    def send_email_sendgrid(self, email: EmailModel):
+        config = self.load_config()
+        url = config["sendgrid_url"]
+        headers = { 'Authorization': f'Bearer {config["sendgrid_auth_token"]}' }
+        payload = {"personalizations":
+                    [{"to": [{"email": email.to_addr}]}],
+                    "from": {"email": email.from_addr},
+                    "subject": email.subject,
+                    "content": [{
+                        "type": "text/plain", "value": email.body
+                    }]
+                }
+        r = requests.post(url = url, json = payload, headers = headers)
+        if(r.status_code == requests.codes.accepted):
+            return True
+        else:
+            return False
+
+    # In a 'real' project this would likely be its own class
+    def load_config(self):
+        with open('config.json') as config:
+            data = json.load(config)
+
+        return data

@@ -21,6 +21,7 @@ def email():
     if(validation != True):
         return jsonify(message = validation)
 
-    return 'All validation passes'
-
-    # return email_service.send_email(test)
+    if(email_service.send_email(model) == True):
+        return jsonify(message = "Email has been sent!")
+    else:
+        return jsonify(message = "Internal error while sending email"), 500
