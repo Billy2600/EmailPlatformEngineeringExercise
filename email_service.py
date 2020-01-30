@@ -60,20 +60,18 @@ class EmailService():
 
 
     def send_email(self, email: EmailModel):
-        return self.send_email_mailgun(email)
+        mailgun = False
+        sendgrid = False
 
-        # mailgun = False
-        # sendgrid = False
-
-        # mailgun = self.send_email_mailgun(email)
+        mailgun = self.send_email_mailgun(email)
         
-        # if(mailgun == False):
-        #     sendgrid = self.send_email_sendgrid(email)
+        if(mailgun == False):
+            sendgrid = self.send_email_sendgrid(email)
 
-        # if(mailgun == True or sendgrid == True):
-        #     return True
-        # else:
-        #     return False
+        if(mailgun == True or sendgrid == True):
+            return True
+        else:
+            return False
 
     def send_email_mailgun(self, email: EmailModel):
         config = self.load_config()
