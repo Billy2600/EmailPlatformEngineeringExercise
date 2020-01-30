@@ -6,6 +6,9 @@ import re
 class EmailService():
     html_regex = re.compile(r'<[^>]+>')
 
+    def __init__(self):
+        self.config = self.load_config()
+
     def get_model_from_json(self, email_json):
         email_model = EmailModel()
         #Slight differences in naming between model and json we take in
@@ -66,7 +69,8 @@ class EmailService():
         mailgun = False
         sendgrid = False
 
-        mailgun = self.send_email_mailgun(email)
+        if(self.config["default_provider"] == "mailgun"):
+            mailgun = self.send_email_mailgun(email)
         
         if(mailgun == False):
             sendgrid = self.send_email_sendgrid(email)
@@ -77,8 +81,7 @@ class EmailService():
             return False
 
     def send_email_mailgun(self, email: EmailModel):
-        config = self.load_config()
-        url = f'https://api:{config["mailgun_api_key"]}@{config["mailgun_base_addr"]}/{config["mailgun_domain_name"]}/messages'
+        url = f'https://api:{self.config["mailgun_api_key"]}@{self.config["mailgun_base_addr"]}/{self.config["mailgun_domain_name"]}/messages'
         payload = {
             "from": f'{email.from_name} <{email.from_addr}>',
             "to": f'{email.to_name} <{email.to_addr}>',
@@ -92,9 +95,8 @@ class EmailService():
             return False
 
     def send_email_sendgrid(self, email: EmailModel):
-        config = self.load_config()
-        url = config["sendgrid_url"]
-        headers = { 'Authorization': f'Bearer {config["sendgrid_auth_token"]}' }
+        url = self.config["sendgrid_url"]
+        headers = { 'Authorization': f'Bearer {self.config["sendgrid_auth_token"]}' }
         payload = {"personalizations":
             [{"to": [{"email": email.to_addr, "name": email.to_name}]}],
             "from": {"email": email.from_addr, "name": email.from_name},

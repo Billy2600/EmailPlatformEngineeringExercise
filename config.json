@@ -3,5 +3,6 @@
     "mailgun_api_key": "",
     "mailgun_domain_name": "",
     "sendgrid_url" : "https://api.sendgrid.com/v3/mail/send",
-    "sendgrid_auth_token" : ""
+    "sendgrid_auth_token" : "",
+    "default_provider": "mailgun"
 }
