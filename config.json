@@ -1,5 +1,7 @@
 {
-    "mailgun_base_addr" : "api.mailgun.net/v3/",
+    "mailgun_base_addr" : "api.mailgun.net/v3",
+    "mailgun_api_key": "",
+    "mailgun_domain_name": "",
     "sendgrid_url" : "https://api.sendgrid.com/v3/mail/send",
     "sendgrid_auth_token" : ""
 }

@@ -60,7 +60,7 @@ class EmailService():
 
 
     def send_email(self, email: EmailModel):
-        return self.send_email_sendgrid(email)
+        return self.send_email_mailgun(email)
 
         # mailgun = False
         # sendgrid = False
@@ -76,22 +76,32 @@ class EmailService():
         #     return False
 
     def send_email_mailgun(self, email: EmailModel):
-
-        url = ''
-        return False
+        config = self.load_config()
+        url = f'https://api:{config["mailgun_api_key"]}@{config["mailgun_base_addr"]}/{config["mailgun_domain_name"]}/messages'
+        payload = {
+            "from": f'{email.from_name} <{email.from_addr}>',
+            "to": f'{email.to_name} <{email.to_addr}>',
+            "subject": email.subject,
+            "text": email.body
+        }
+        r = requests.post(url = url, data = payload)
+        if(r.status_code == requests.codes.ok):
+            return True
+        else:
+            return False
 
     def send_email_sendgrid(self, email: EmailModel):
         config = self.load_config()
         url = config["sendgrid_url"]
         headers = { 'Authorization': f'Bearer {config["sendgrid_auth_token"]}' }
         payload = {"personalizations":
-                    [{"to": [{"email": email.to_addr, "name": email.to_name}]}],
-                    "from": {"email": email.from_addr, "name": email.from_name},
-                    "subject": email.subject,
-                    "content": [{
-                        "type": "text/plain", "value": email.body
-                    }]
-                }
+            [{"to": [{"email": email.to_addr, "name": email.to_name}]}],
+            "from": {"email": email.from_addr, "name": email.from_name},
+            "subject": email.subject,
+            "content": [{
+                "type": "text/plain", "value": email.body
+            }]
+        }
         r = requests.post(url = url, json = payload, headers = headers)
         if(r.status_code == requests.codes.accepted):
             return True
