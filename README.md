@@ -13,7 +13,8 @@
 * On Mac and Linux, this can be done with `export FLASK_APP = "main.py"`
 6. Run Python with Flask with the following command: `python -m flask run`
 7. Send a JSON POST request like the following to `http://127.0.0.1:5000/email`:
-```{
+```
+{
 	"to": "fake@fake.com",
 	"to_name": "Mr. Fake",
 	"from": "norpely@myfakewebsite.com",
