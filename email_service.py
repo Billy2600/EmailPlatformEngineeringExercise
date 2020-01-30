@@ -1,8 +1,11 @@
 from email_model import EmailModel
 import requests
 import json
+import re
 
 class EmailService():
+    html_regex = re.compile(r'<[^>]+>')
+
     def get_model_from_json(self, email_json):
         email_model = EmailModel()
         #Slight differences in naming between model and json we take in
@@ -32,7 +35,7 @@ class EmailService():
             email_model.subject = ''
         
         try:
-            email_model.body = email_json["body"]
+            email_model.body = self.html_regex.sub('\n', email_json["body"]) #Also strip HTML
         except KeyError:
             email_model.body = ''
 
