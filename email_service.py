@@ -48,7 +48,7 @@ class EmailService():
     # Returns error string or True if successful
     def validate_email(self, email: EmailModel):
 
-        # Might be some refleciton/looping we could do here?
+        # Might be some reflection/looping we could do here?
         if(not email.to_addr):
             return "'to' not set" #Return json name for this property, not model name
         if(not email.to_name):
