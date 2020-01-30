@@ -33,7 +33,8 @@ Python is not my language of choice, most of the time. However, it is really goo
 * Again, because I chose technologies I wasn't completely familiar with it ended up taking longer, and some of the technologies might not have been used to their full potential.
 * Were this a 'full' project, I probably would've tried to separate the controller, model, and service into their own subdirectories
 * An obvious thing I'd change is configuration loading being a part of EmailService -- in a 'real' project I'd probably implement this as its own class.
-* Only basic validation is being done on the different email fields, as well as stripping the HTML tags. It doesn't even check that that email addressess are valid address -- should include a @, domain name, etc. There probably is in fact a smarter way to handle stripping the HTML tags, but I think most modern HTML clients read HTML anyway, so I'm not sure what that'd be without more research.
-* There's probably a faster way to convert to/from a Python object and a JSON object
-* Ran into an issue early on where `from` is a reserved keyword in Python
-* Unit tests should definitely be added, with Python's `unittest` framework
+* Only basic validation is being done on the different email fields, as well as stripping the HTML tags. It doesn't even check that that email addressess are valid address -- should include a @, domain name, etc. (There's probably a library to do this out there) There probably is in fact a smarter way to handle stripping the HTML tags, but I think most modern HTML clients read HTML anyway, so I'm not sure what that'd be without more research.
+* There's probably a faster way to convert to/from a Python object and a JSON object.
+* Ran into an issue early on where `from` is a reserved keyword in Python.
+* Unit tests should definitely be added, with Python's `unittest` framework.
+* Error messages are not super descriptive, and there is currently no indication which email service was used.
